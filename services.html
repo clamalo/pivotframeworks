@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Services - Pivot Frameworks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Services-specific styles */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .service-card {
+      text-align: left;
+      padding: 2rem;
+      background: #f8f9fa;
+      border-radius: 12px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .service-card h3 {
+      color: #000428;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .service-card p {
+      text-align: left;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Our Services</h1>
+    <p>Discover how our weekly innovation cycle can transform your ideas into reality</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <main>
+    <h2>What We Offer</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <h3>Problem Analysis</h3>
+        <p>Every Sunday, we identify pressing challenges in the market that need innovative solutions.</p>
+      </div>
+      <div class="service-card">
+        <h3>Rapid Development</h3>
+        <p>Our team dedicates the entire week to building a focused minimum viable product.</p>
+      </div>
+      <div class="service-card">
+        <h3>Continuous Innovation</h3>
+        <p>Weekly iterations ensure we stay agile and responsive to market needs.</p>
+      </div>
+    </div>
+    <button class="cta-button" onclick="handleClick()">Start a Project</button>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Pivot Frameworks. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function handleClick() {
+      alert("Thanks for your interest! We'll be in touch soon.");
+    }
+  </script>
+</body>
+</html>

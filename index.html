@@ -3,111 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <title>Pivot Frameworks</title>
-  <style>
-    /* Basic reset and styling */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      color: #333;
-    }
-
-    /* Header styling */
-    header {
-      background-color: #222;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    /* Navigation */
-    nav {
-      background-color: #fff;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      padding: 10px;
-      text-align: center;
-    }
-    nav a {
-      color: #333;
-      text-decoration: none;
-      margin: 0 10px;
-      font-weight: bold;
-    }
-    nav a:hover {
-      color: #007bff;
-    }
-
-    /* Main section */
-    main {
-      margin: 20px auto;
-      max-width: 800px;
-      background-color: #fff;
-      padding: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-    main h2 {
-      margin-bottom: 10px;
-    }
-    main p {
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    /* Button styling */
-    button {
-      padding: 10px 15px;
-      background-color: #333;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      border-radius: 3px;
-    }
-    button:hover {
-      background-color: #555;
-    }
-
-    /* Footer styling */
-    footer {
-      text-align: center;
-      background-color: #222;
-      color: #fff;
-      padding: 10px;
-      margin-top: 20px;
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- Header (Hero Section) -->
   <header>
     <h1>Pivot Frameworks</h1>
+    <p>We identify a new challenge every Sunday, spend the following week creating a purposeful minimum viable product that addresses it, and then repeat the process to foster continuous innovation.</p>
   </header>
 
+  <!-- Navigation -->
   <nav>
-    <a href="#">Home</a>
-    <a href="#">Services</a>
-    <a href="#">Contact</a>
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
   </nav>
 
+  <!-- Main Content -->
   <main>
     <h2>Welcome to Pivot Frameworks</h2>
-    <p>
-      We’re the next-generation company helping you pivot your projects and ideas 
-      into robust frameworks for web, mobile, and beyond. At Pivot Frameworks, 
-      we believe in streamlined workflows, efficient collaboration, and quality results.
-    </p>
-    <button onclick="handleClick()">Click Me</button>
+    <p>At Pivot Frameworks, we believe in streamlined workflows, efficient collaboration, and quality results every time.</p>
+    <button class="cta-button" onclick="handleClick()">Learn More</button>
   </main>
 
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 Pivot Frameworks. All rights reserved.</p>
   </footer>
 
+  <!-- JavaScript -->
   <script>
     function handleClick() {
-      alert("Hello from Pivot Frameworks!");
+      alert("Thanks for your interest in Pivot Frameworks! We'll be in touch soon.");
     }
   </script>
 </body>
