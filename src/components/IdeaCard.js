@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import EditIdeaModal from './EditIdeaModal';
+import { auth } from '../firebase';
+import { getNameFromEmail } from '../utils/userUtils';
 
 /**
- * For unranked ideas: 
- * - A text input to store temporary rank in "onRankInput"
- * For ranked ideas:
- * - Display the rank in a text input, and call "onRankChange" when changed
+ * Each user sees one voting box (or an Edit button if they've already voted).
+ * Once all three users have voted, the average is computed and the idea automatically moves to ranked.
+ * If the idea is ranked, we display its final average rank. Users can still edit their own vote.
  */
-function IdeaCard({ idea, isUnranked, onRankInput, onRankChange, onDelete, onEdit }) {
-  const [localRank, setLocalRank] = useState(idea.rank || '');
+function IdeaCard({ idea, onDelete, onEdit, onSaveVote }) {
+  const userName = getNameFromEmail(auth.currentUser?.email || '');
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const handleChange = (e) => {
-    setLocalRank(e.target.value);
-    if (isUnranked) {
-      onRankInput(e.target.value);
-    } else if (onRankChange) {
-      onRankChange(idea.id, e.target.value);
+  // Current user's existing vote
+  const userVote = idea.votes?.[userName];
+  const [isEditingVote, setIsEditingVote] = useState(userVote === null);
+  const [tempVote, setTempVote] = useState(
+    userVote !== null && userVote !== undefined ? userVote : ''
+  );
+
+  const handleSaveVoteClick = () => {
+    const parsed = parseFloat(tempVote);
+    if (!isNaN(parsed) && parsed >= 0 && parsed <= 10) {
+      onSaveVote(idea.id, userName, parsed);
+      setIsEditingVote(false);
     }
   };
 
@@ -24,14 +31,24 @@ function IdeaCard({ idea, isUnranked, onRankInput, onRankChange, onDelete, onEdi
     <>
       <div className="idea-card">
         <div className="idea-card-header">
-            <h4>{idea.title}</h4>
+          <h4>{idea.title}</h4>
           <div className="idea-card-actions">
             <button
               onClick={() => setShowEditModal(true)}
               className="edit-btn"
               aria-label="Edit idea"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M12 20h9"></path>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
@@ -45,21 +62,59 @@ function IdeaCard({ idea, isUnranked, onRankInput, onRankChange, onDelete, onEdi
             </button>
           </div>
         </div>
+
         <p>{idea.info}</p>
-        <div className="idea-card-footer">
-          <div className="creator-tag">Creator: {idea.creator}</div>
-            <div className="rank-input-group">
-            <label>Rank:</label>
+
+        {/* Voting Section for Current User */}
+        <div style={{ marginTop: '1rem' }}>
+          {isEditingVote ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <label>Your Vote:</label>
               <input
                 type="number"
-              step="0.1"
                 min="0"
                 max="10"
-              value={localRank}
-              onChange={handleChange}
-                className="rank-input"
+                step="0.1"
+                value={tempVote}
+                onChange={(e) => setTempVote(e.target.value)}
+                style={{ width: '70px' }}
               />
+              <button onClick={handleSaveVoteClick} className="btn-primary">
+                Save
+              </button>
             </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <p>Your Vote: {userVote}</p>
+              <button
+                onClick={() => setIsEditingVote(true)}
+                className="edit-btn"
+                aria-label="Edit your vote"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="idea-card-footer">
+          <div className="creator-tag">Creator: {idea.creator}</div>
+          {idea.rank !== null && (
+            <div style={{ fontWeight: 'bold' }}>Final Rank: {idea.rank}</div>
+          )}
         </div>
       </div>
 

@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { auth, signOut, db, collection, getDocs, setDoc, doc, deleteDoc, onSnapshot } from '../firebase';
+import {
+  auth,
+  signOut,
+  db,
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  deleteDoc,
+  onSnapshot
+} from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import AddIdeaModal from '../components/AddIdeaModal';
 import IdeaCard from '../components/IdeaCard';
@@ -17,8 +27,14 @@ function IdeaSpace({ isNavOpen, setIsNavOpen }) {
         allIdeas.push({ id: docItem.id, ...docItem.data() });
       });
 
-      const unranked = allIdeas.filter((idea) => idea.rank === null || idea.rank === undefined);
-      const ranked = allIdeas.filter((idea) => idea.rank !== null && idea.rank !== undefined);
+      // Separate ideas by whether rank is set
+      const unranked = allIdeas.filter(
+        (idea) => idea.rank === null || idea.rank === undefined
+      );
+      const ranked = allIdeas.filter(
+        (idea) => idea.rank !== null && idea.rank !== undefined
+      );
+      // Sort ranked (descending)
       ranked.sort((a, b) => b.rank - a.rank);
 
       setUnrankedIdeas(unranked);
@@ -37,8 +53,12 @@ function IdeaSpace({ isNavOpen, setIsNavOpen }) {
     snapshot.forEach((docItem) => {
       allIdeas.push({ id: docItem.id, ...docItem.data() });
     });
-    const unranked = allIdeas.filter((idea) => idea.rank === null || idea.rank === undefined);
-    const ranked = allIdeas.filter((idea) => idea.rank !== null && idea.rank !== undefined);
+    const unranked = allIdeas.filter(
+      (idea) => idea.rank === null || idea.rank === undefined
+    );
+    const ranked = allIdeas.filter(
+      (idea) => idea.rank !== null && idea.rank !== undefined
+    );
     ranked.sort((a, b) => b.rank - a.rank);
 
     setUnrankedIdeas(unranked);
@@ -50,30 +70,6 @@ function IdeaSpace({ isNavOpen, setIsNavOpen }) {
     navigate('/login');
   };
 
-  const handleMoveToRanked = async () => {
-    const validRanked = unrankedIdeas.filter(
-      (idea) => idea.tempRank !== undefined && idea.tempRank !== null && idea.tempRank !== ''
-    );
-    for (let item of validRanked) {
-      const rankNum = parseFloat(item.tempRank);
-      if (!isNaN(rankNum) && rankNum >= 0 && rankNum <= 10) {
-        await setDoc(doc(db, 'ideas', item.id), {
-          ...item,
-          rank: rankNum
-        });
-      }
-    }
-    fetchIdeas();
-  };
-
-  const handleRankChange = async (id, newRank) => {
-    const rankNum = parseFloat(newRank);
-    if (!isNaN(rankNum)) {
-      await setDoc(doc(db, 'ideas', id), { rank: rankNum }, { merge: true });
-      fetchIdeas();
-    }
-  };
-
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, 'ideas', id));
@@ -83,12 +79,61 @@ function IdeaSpace({ isNavOpen, setIsNavOpen }) {
     }
   };
 
+  // Merge existing doc with the updated fields so we don't lose 'votes'
   const handleEdit = async (updatedIdea) => {
     try {
-      await setDoc(doc(db, 'ideas', updatedIdea.id), updatedIdea);
+      await setDoc(doc(db, 'ideas', updatedIdea.id), updatedIdea, { merge: true });
       fetchIdeas();
     } catch (error) {
       console.error('Error editing idea:', error);
+    }
+  };
+
+  /**
+   * Handle a user's vote: set the user's vote in the idea's "votes" object.
+   * If all three votes are present, compute the average and store in "rank".
+   * Otherwise, keep "rank" as null.
+   */
+  const handleSaveVote = async (ideaId, userName, voteValue) => {
+    const docRef = doc(db, 'ideas', ideaId);
+
+    // Find the idea in our current state
+    let currentIdea =
+      unrankedIdeas.find((i) => i.id === ideaId) ||
+      rankedIdeas.find((i) => i.id === ideaId);
+
+    if (!currentIdea) return;
+
+    const updatedVotes = {
+      ...currentIdea.votes,
+      [userName]: voteValue
+    };
+
+    // Check if all three users have voted
+    const { Clay, Finn, Ryder } = updatedVotes;
+    const allVoted =
+      Clay !== null && Clay !== undefined &&
+      Finn !== null && Finn !== undefined &&
+      Ryder !== null && Ryder !== undefined;
+
+    let newRank = null;
+    if (allVoted) {
+      const avg = (Clay + Finn + Ryder) / 3;
+      newRank = parseFloat(avg.toFixed(1));
+    }
+
+    try {
+      await setDoc(
+        docRef,
+        {
+          votes: updatedVotes,
+          rank: newRank
+        },
+        { merge: true }
+      );
+      fetchIdeas();
+    } catch (error) {
+      console.error('Error saving vote:', error);
     }
   };
 
@@ -112,20 +157,14 @@ function IdeaSpace({ isNavOpen, setIsNavOpen }) {
         <div className="tab-section">
           <h3>Unranked Ideas</h3>
           <button onClick={() => setShowAddModal(true)}>Add Idea</button>
-          <button onClick={handleMoveToRanked} style={{ float: 'right' }}>
-            Move
-          </button>
-          <div className="ideas-list">
+          <div className="ideas-list" style={{ marginTop: '1rem' }}>
             {unrankedIdeas.map((idea) => (
               <IdeaCard
                 key={idea.id}
                 idea={idea}
-                isUnranked
-                onRankInput={(val) => {
-                  idea.tempRank = val;
-                }}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
+                onSaveVote={handleSaveVote}
               />
             ))}
           </div>
@@ -133,15 +172,14 @@ function IdeaSpace({ isNavOpen, setIsNavOpen }) {
 
         <div className="tab-section">
           <h3>Ranked Ideas</h3>
-          <div className="ideas-list">
+          <div className="ideas-list" style={{ marginTop: '1rem' }}>
             {rankedIdeas.map((idea) => (
               <IdeaCard
                 key={idea.id}
                 idea={idea}
-                isUnranked={false}
-                onRankChange={handleRankChange}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
+                onSaveVote={handleSaveVote}
               />
             ))}
           </div>

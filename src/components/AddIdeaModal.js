@@ -19,12 +19,17 @@ function AddIdeaModal({ onClose, onIdeaAdded }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Create an idea with rank=null
+    // Create an idea with rank=null and blank votes for each user
     await addDoc(collection(db, 'ideas'), {
       title,
       info,
       creator,
-      rank: null
+      rank: null,
+      votes: {
+        Clay: null,
+        Finn: null,
+        Ryder: null
+      }
     });
     onIdeaAdded();
     onClose();
