@@ -8,6 +8,7 @@ import { auth, onAuthStateChanged } from './firebase';
 import Login from './routes/Login';
 import IdeaSpace from './routes/IdeaSpace';
 import ActionItems from './routes/ActionItems';
+import Landing from './routes/Landing';
 
 // Components
 import Navigation from './components/Navigation';
@@ -43,7 +44,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Always show the login form (public route). */}
+        {/* Public routes */}
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login user={user} />} />
 
         {/* Protected routes: Only show if user is logged in. */}
@@ -67,14 +69,6 @@ function App() {
                 <ActionItems isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
               </>
             </PrivateRoute>
-          }
-        />
-
-        {/* Root path: go to /ideas if logged in, otherwise /login */}
-        <Route
-          path="/"
-          element={
-            user ? <Navigate to="/ideas" replace /> : <Navigate to="/login" replace />
           }
         />
 
