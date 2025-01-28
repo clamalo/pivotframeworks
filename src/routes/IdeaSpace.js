@@ -27,6 +27,10 @@ function IdeaSpace({ isNavOpen, setIsNavOpen }) {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    document.title = 'Ideas - Pivot Frameworks';
+  }, []);
+
   const fetchIdeas = async () => {
     const snapshot = await getDocs(collection(db, 'ideas'));
     const allIdeas = [];

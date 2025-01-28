@@ -150,6 +150,10 @@ function ActionItems({ isNavOpen, setIsNavOpen }) {
     setShowAddModal(true);
   };
 
+  useEffect(() => {
+    document.title = 'Action Items - Pivot Frameworks';
+  }, []);
+
   /**
    * 6. Render
    */

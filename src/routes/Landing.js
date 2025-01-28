@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/styles.css';
 
 function Landing() {
+  useEffect(() => {
+    document.title = 'Pivot Frameworks';
+  }, []);
+
   return (
     <div className="landing-page">
       <nav className="landing-nav">

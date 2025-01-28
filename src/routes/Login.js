@@ -9,6 +9,10 @@ function Login({ user }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = 'Login - Pivot Frameworks';
+  }, []);
+
   // If already logged in, redirect
   useEffect(() => {
     if (user) {
