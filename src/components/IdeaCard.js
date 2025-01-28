@@ -24,9 +24,9 @@ function IdeaCard({ idea, isUnranked, onRankInput, onRankChange, onDelete, onEdi
     <>
       <div className="idea-card">
         <div className="idea-card-header">
-          <h4>{idea.title}</h4>
+            <h4>{idea.title}</h4>
           <div className="idea-card-actions">
-            <button 
+            <button
               onClick={() => setShowEditModal(true)}
               className="edit-btn"
               aria-label="Edit idea"
@@ -36,7 +36,7 @@ function IdeaCard({ idea, isUnranked, onRankInput, onRankChange, onDelete, onEdi
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
             </button>
-            <button 
+            <button
               onClick={() => onDelete(idea.id)}
               className="delete-btn"
               aria-label="Delete idea"
@@ -48,18 +48,18 @@ function IdeaCard({ idea, isUnranked, onRankInput, onRankChange, onDelete, onEdi
         <p>{idea.info}</p>
         <div className="idea-card-footer">
           <div className="creator-tag">Creator: {idea.creator}</div>
-          <div className="rank-input-group">
+            <div className="rank-input-group">
             <label>Rank:</label>
-            <input
-              type="number"
+              <input
+                type="number"
               step="0.1"
-              min="0"
-              max="10"
+                min="0"
+                max="10"
               value={localRank}
               onChange={handleChange}
-              className="rank-input"
-            />
-          </div>
+                className="rank-input"
+              />
+            </div>
         </div>
       </div>
 
