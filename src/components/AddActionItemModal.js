@@ -32,17 +32,17 @@ function AddActionItemModal({ onClose, onAdded, parentId, parentAssignedTo, defa
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newDoc = {
-      name,
-      notes,
-      completionDate: date,
-      timeEstimate,
+        name,
+        notes,
+        completionDate: date,
+        timeEstimate,
       assignedTo: parentId ? parentAssignedTo : assignedTo,
       createdAt: new Date().toISOString(),
       parentId: parentId || null
-    };
+      };
     await addDoc(collection(db, 'actionItems'), newDoc);
-    onAdded();
-    onClose();
+      onAdded();
+      onClose();
   };
 
   return (
@@ -106,15 +106,15 @@ function AddActionItemModal({ onClose, onAdded, parentId, parentAssignedTo, defa
             <div className="form-group">
               <label>Assigned To:</label>
               <div className="action-items-dropdown">
-                <select 
-                  value={assignedTo} 
-                  onChange={(e) => setAssignedTo(e.target.value)}
-                >
-                  <option value="Open Task">Open Task</option>
-                  <option value="Finn">Finn</option>
-                  <option value="Clay">Clay</option>
-                  <option value="Ryder">Ryder</option>
-                </select>
+              <select
+                value={assignedTo}
+                onChange={(e) => setAssignedTo(e.target.value)}
+              >
+                <option value="Open Task">Open Task</option>
+                <option value="Finn">Finn</option>
+                <option value="Clay">Clay</option>
+                <option value="Ryder">Ryder</option>
+              </select>
               </div>
             </div>
           )}

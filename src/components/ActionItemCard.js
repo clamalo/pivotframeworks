@@ -103,7 +103,7 @@ function ActionItemCard({
             <strong>Assigned To:</strong> {task.assignedTo || 'Open Task'}
           </p>
 
-          <div className="card-buttons">
+            <div className="card-buttons">
             <button
               onClick={handleEdit}
               className="edit-btn"
@@ -123,14 +123,14 @@ function ActionItemCard({
                 <path d="M12 20h9"></path>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
-            </button>
+              </button>
             <button
               onClick={() => onDelete(task.id)}
               className="delete-btn"
               aria-label="Delete action item"
             >
               ×
-            </button>
+              </button>
             <button
               onClick={() => onAddSubtask(task)}
               className="edit-btn"
@@ -150,8 +150,9 @@ function ActionItemCard({
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
-            </button>
-          </div>
+              </button>
+
+            </div>
 
           {subtasks && subtasks.length > 0 && (
             <div className="subtasks">
