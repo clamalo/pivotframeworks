@@ -9,6 +9,7 @@ import Login from './routes/Login';
 import IdeaSpace from './routes/IdeaSpace';
 import ActionItems from './routes/ActionItems';
 import Landing from './routes/Landing';
+import MeetingAgenda from './routes/MeetingAgenda';
 
 // Components
 import Navigation from './components/Navigation';
@@ -67,6 +68,17 @@ function App() {
               <>
                 <Navigation isOpen={isNavOpen} setIsOpen={setIsNavOpen} />
                 <ActionItems isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/agenda"
+          element={
+            <PrivateRoute user={user}>
+              <>
+                <Navigation isOpen={isNavOpen} setIsOpen={setIsNavOpen} />
+                <MeetingAgenda isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
               </>
             </PrivateRoute>
           }
