@@ -18,6 +18,9 @@ function ActionItemCard({
   const [editedDate, setEditedDate] = useState(task.completionDate || '');
   const [editedTimeEstimate, setEditedTimeEstimate] = useState(task.timeEstimate || '');
   const [editedAssignedTo, setEditedAssignedTo] = useState(task.assignedTo);
+  const [editedUrgency, setEditedUrgency] = useState(
+    task.urgency?.toString() || '1'
+  );
 
   const handleEdit = () => {
     setEditing(true);
@@ -29,7 +32,8 @@ function ActionItemCard({
       notes: editedNotes,
       completionDate: editedDate,
       timeEstimate: editedTimeEstimate,
-      assignedTo: editedAssignedTo
+      assignedTo: editedAssignedTo,
+      urgency: parseInt(editedUrgency, 10)
     });
     setEditing(false);
   };
@@ -41,6 +45,7 @@ function ActionItemCard({
     setEditedDate(task.completionDate || '');
     setEditedTimeEstimate(task.timeEstimate || '');
     setEditedAssignedTo(task.assignedTo);
+    setEditedUrgency(task.urgency?.toString() || '1');
   };
 
   return (
@@ -82,6 +87,18 @@ function ActionItemCard({
             </select>
           </div>
 
+          <label>Urgency: </label>
+          <div className="action-items-dropdown">
+            <select
+              value={editedUrgency}
+              onChange={(e) => setEditedUrgency(e.target.value)}
+            >
+              <option value="1">Low Priority</option>
+              <option value="2">Medium Priority</option>
+              <option value="3">High Priority</option>
+            </select>
+          </div>
+
           <div className="card-buttons">
             <button onClick={handleSave}>Save</button>
             <button onClick={handleCancel}>Cancel</button>
@@ -102,8 +119,15 @@ function ActionItemCard({
           <p>
             <strong>Assigned To:</strong> {task.assignedTo || 'Open Task'}
           </p>
+          <p>
+            <strong>Urgency:</strong> {task.urgency || 1}
+          </p>
+          {/* Created By is read-only and not editable */}
+          <p>
+            <strong>Created By:</strong> {task.createdBy || 'Unknown'}
+          </p>
 
-            <div className="card-buttons">
+          <div className="card-buttons">
             <button
               onClick={handleEdit}
               className="edit-btn"
@@ -123,14 +147,14 @@ function ActionItemCard({
                 <path d="M12 20h9"></path>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
-              </button>
+            </button>
             <button
               onClick={() => onDelete(task.id)}
               className="delete-btn"
               aria-label="Delete action item"
             >
               ×
-              </button>
+            </button>
             <button
               onClick={() => onAddSubtask(task)}
               className="edit-btn"
@@ -150,13 +174,12 @@ function ActionItemCard({
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
-              </button>
-
-            </div>
+            </button>
+          </div>
 
           {subtasks && subtasks.length > 0 && (
             <div className="subtasks">
-              {subtasks.map(childTask => (
+              {subtasks.map((childTask) => (
                 <ActionItemCard
                   key={childTask.id}
                   task={childTask}

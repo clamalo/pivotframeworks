@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 
 function EditIdeaModal({ idea, onClose, onSave }) {
   const [title, setTitle] = useState(idea.title);
-  const [info, setInfo] = useState(idea.info);
-  const [creator, setCreator] = useState(idea.creator);
+  const [description, setDescription] = useState(idea.description);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave({
       ...idea,
       title,
-      info,
-      creator
+      description
     });
     onClose();
   };
@@ -47,28 +45,14 @@ function EditIdeaModal({ idea, onClose, onSave }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="info">Additional Information</label>
+            <label htmlFor="description">Description</label>
             <textarea
-              id="info"
-              value={info}
-              onChange={(e) => setInfo(e.target.value)}
-              placeholder="Enter additional information"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe your idea"
               rows="4"
             />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="creator">Creator</label>
-            <select
-              id="creator"
-              value={creator}
-              onChange={(e) => setCreator(e.target.value)}
-              required
-            >
-              <option value="Finn">Finn</option>
-              <option value="Clay">Clay</option>
-              <option value="Ryder">Ryder</option>
-            </select>
           </div>
 
           <div className="modal-footer">
