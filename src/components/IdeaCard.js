@@ -21,7 +21,7 @@ function IdeaCard({ idea, onDelete, onEdit, onSaveVote }) {
 
   const handleSaveVote = () => {
     const vote = parseFloat(voteValue);
-    if (!isNaN(vote) && vote >= 0 && vote <= 10) {
+    if (!isNaN(vote) && vote >= 0 && vote <= 5) {
       onSaveVote(idea.id, userName, vote);
       setIsEditingVote(false);
     }
@@ -101,11 +101,11 @@ function IdeaCard({ idea, onDelete, onEdit, onSaveVote }) {
               </div>
             ) : (
               <div className="vote-input-group">
-                <label>Your Vote (0-10):</label>
+                <label>Your Vote (0-5):</label>
                 <input
                   type="number"
                   min="0"
-                  max="10"
+                  max="5"
                   step="0.1"
                   value={voteValue}
                   onChange={(e) => setVoteValue(e.target.value)}
